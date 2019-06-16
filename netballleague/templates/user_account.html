@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <div class="content-section">
+        <div class="media">
+            <img src="{{ image_file }}"
+            alt="" class="rounded-circle account-img">
+            <div class="media-body">
+                <h4 class="account-heading"> {{ player.name }} </h4>
+                <p class="text-secondary"> {{ player.email }} </p>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

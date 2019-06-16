@@ -1,0 +1,13 @@
+# ignore virtual env
+virtual/
+
+# ignore pycache folders
+__pycache__/
+
+# ignore all image files
+*.jpg
+*.JPG
+*.png
+
+# ignore sqlite database
+netball.db
