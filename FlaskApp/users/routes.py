@@ -1,7 +1,7 @@
 from flask import (render_template, redirect, url_for, flash, request,
     Blueprint, current_app)
 from FlaskApp import db, bcrypt, mail
-from FlaskApp.models import User, PendingUser, Team
+from FlaskApp.models import User, PendingUser, Team, Post
 from FlaskApp.users.forms import (AddPlayerRequest, LoginForm,
     AddPlayer, UpdateAccountForm, RequestResetForm, ResetPasswordForm,
     ChangePassword)
@@ -123,6 +123,13 @@ def delete_user(user_email):
         db.session.commit()
         flash('User deleted!', 'info')
     elif approved_email:
+        # bug prevented user from being deleted if they have posts.
+        # below fix gets all posts associated with the user, deletes them
+        # first (if they exist), and then attempts to delete user
+        posts = Post.query.filter_by(user_id=approved_email.id).all()
+        if posts:
+            for post in posts:
+                db.session.delete(post)
         db.session.delete(approved_email)
         db.session.commit()
         flash('User deleted!', 'info')

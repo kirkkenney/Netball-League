@@ -55,7 +55,10 @@ as well as dynamically inserted edit permissions within the relevant pages.
 
 * Tidy up styling.
 
-* Bug currently prevents a user from being deleted if the user has posts
+* Add confirmation modals before allowing user to delete data
+
+~~* Bug currently prevents a user from being deleted if the user has posts~~
+   * Added a fix to delete all posts associated with user first
 
  ~~* Passwords are currently set to 'password' by default for testing purposes. This
  needs to be amended so that they are automatically assigned a generated token as
