@@ -1,0 +1,11 @@
+<h3> {{ post.author.name }} has made a new post in {{ post.team }}! </h3>
+
+<h2> {{ post.title }} </h2>
+
+<h4> {{ post.content[:120] }}... </h4>
+
+<h3>
+  <a href="{{ url_for('posts.team_posts', team=post.team, _external=True) }}">
+    Login to your account
+  </a> to see the post!
+</h3>

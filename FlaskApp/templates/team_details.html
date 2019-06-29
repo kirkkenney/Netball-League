@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <!-- TEAM RANKINGS -->
+    <table class="table table-bordered table-hover text-center">
+        <thead class="thead-dark">
+            <tr>
+                <th>Points</th>
+                <th>Won</th>
+                <th>Lost</th>
+                <th>Drawn</th>
+            </tr>
+            <tr>
+                <td>{{ team.points }}</td>
+                <td>{{ team.matches_won }}</td>
+                <td>{{ team.matches_drawn }}</td>
+                <td>{{ team.matches_lose }}</td>
+            </tr>
+        </thead>
+    </table>
+    <div class="text-center">
+        {% if not players %}
+            <p class="text-danger">There don't seem to be any players registered for this team yet ...</p>
+        {% else %}
+
+        <!-- LINKS TO OTHER TEAM PAGES -->
+        {% if current_user.team == team.name %}
+
+        <div class="d-flex flex-wrap text-center justify-content-center">
+            <a href="{{url_for('teams.team_posts', team=team.name)}}">
+                <button class="btn branding m-2">Team Posts</button>
+            </a>
+            <a href="{{url_for('teams.team_matches', team=team.name)}}">
+                <button class="btn branding m-2">Team Matches</button>
+            </a>
+            {% if current_user.player_status == 'Captain' %}
+            <a href="{{url_for('users.register_player')}}">
+                <button class="btn branding m-2">Add Player</button>
+            </a>
+            {% endif %}
+        </div>
+
+        {% endif %}
+
+        <!-- PLAYER LIST -->
+            <div class="d-flex flex-wrap justify-content-center w-100">
+                {% for player in players %}
+                    <div class="content-section m-3 w-30">
+                        <div class="media">
+                            <img src="../static/profile_pics/{{ player.profile_pic }}" alt="" class="rounded-circle account-img">
+                            <div class="media-body">
+                                <h4 class="mt-4">
+                                    <a href="{{url_for('users.account', user_id=player.id, user=player.name)}}">
+                                    {{ player.name }} </a></h4>
+                                <p class="text-secondary"> {{ player.player_status }} </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock content %}

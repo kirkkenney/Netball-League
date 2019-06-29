@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    {% if current_user.admin_level == 'Admin' or current_user.admin_level == 'Rep' %}
+        <a href="{{url_for('users.admin_add_player')}}" class="btn btn-primary m-3 p-2">
+            Add New Player
+        </a>
+        <a href="{{url_for('matches.add_match')}}" class="btn btn-primary m-3 p-2">
+            Add New Match
+        </a>
+        <a href="{{url_for('users.users_list')}}" class="btn btn-primary m-3 p-2">
+            Users List
+        </a>
+        <a href="{{url_for('teams.add_team')}}" class="btn btn-primary m-3 p-2">
+            Add A New Team
+        </a>
+    {% else %}
+        <a href="{{url_for('users.register_player')}}" class="btn btn-primary m-3 p-2">
+            Add New Player
+        </a>
+    {% endif %}
+
+{% endblock content %}

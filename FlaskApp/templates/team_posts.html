@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <div class="text-center">
+        <h2 class="border-bottom mb-4 p-2"> {{ team }} Posts </h2>
+        <a href="{{url_for('posts.add_new_post', team=team)}}">
+            <button class="btn branding">
+                Add New Post
+            </button>
+        </a>
+        {% if posts %}
+            <div class="container mt-4">
+                <div class="row justify-content-center">
+                    {% for post in posts %}
+                        <div class="col-sm col-md-5 mt-4">
+                            <article class="media content-section h-100">
+                              <img src="{{ url_for('static', filename='profile_pics/' + post.author.profile_pic) }}"
+                              alt="" class="rounded-circle article-img">
+                              <div class="media-body">
+                                <div class="article-metadata">
+                                  by <a class="mr-2" href="{{url_for('users.account', user_id=post.author.id, user=post.author.name)}}">{{ post.author.name }}</a>
+                                  <small class="text-muted">{{ post.date_posted.strftime('%d-%m-%Y') }}</small>
+                                </div>
+                                <h2><a class="article-title" href="{{url_for('posts.post_page', team=post.author.team, post_id=post.id)}}">{{ post.title }}</a></h2>
+                                <p class="article-content">{{ post.content[:120] }}...</p>
+                              </div>
+                            </article>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock content %}

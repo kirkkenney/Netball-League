@@ -11,3 +11,8 @@ __pycache__/
 
 # ignore sqlite database
 netball.db
+
+# ignore requirement and dependencies files
+dependencies.txt
+old-requirements.txt
+requirements.txt

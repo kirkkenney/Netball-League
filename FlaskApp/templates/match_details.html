@@ -1,0 +1,203 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <!-- MATCH OVERVIEW -->
+    <div class="content-section text-center">
+        <h3>
+            <a href="{{url_for('teams.my_team', user_team=match.home_team)}}">{{ match.home_team }}</a>
+            vs <a href="{{url_for('teams.my_team', user_team=match.away_team)}}">{{ match.away_team }}</a>
+        </h3>
+        <h4> on {{ match.date.strftime('%d/%m/%Y') }} at {{ match.time.strftime('%H:%M') }} </h4>
+        <p> Where: {{ match.location }} </p>
+        {% if match.home_approved and match.away_approved %}
+            <h5>Score: {{ match.home_score }} - {{ match.away_score }}</h5>
+            <p class="mt-3">
+                {{ match.home_team }} score approved by {{ match.home_approved_by }}
+                on {{ match.home_approved_time.strftime('%d/%m/%Y') }}
+                at {{ match.home_approved_time.strftime('%H:%M') }}
+            </p>
+            <p>
+                {{ match.away_team }} score approved by {{ match.away_approved_by }}
+                on {{ match.away_approved_time.strftime('%d/%m/%Y') }}
+                at {{ match.away_approved_time.strftime('%H:%M') }}
+            </p>
+        {% else %}
+            <p>Score: Game not finished</p>
+        {% endif %}
+    </div>
+
+    <!-- LIST PLAYERS FOR EACH TEAM -->
+    {% if match.home_players or match.away_players %}
+        <div class="container">
+            <div class="row">
+                {% if match.home_players %}
+                    <div class="col-sm content-section text-center p-3 m-3">
+                        <h4 class="border-bottom mb-4">Playing For {{ match.home_team }}</h4>
+                        <div class="d-flex justify-content-center">
+                            {% for player in match.home_players %}
+                                <span class="text-success border border-success rounded p-2">
+                                    {{ player }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                {% if match.away_players %}
+                    <div class="col-sm content-section text-center p-3 m-3">
+                        <h4 class="border-bottom mb-4">Playing For {{ match.away_team }}</h4>
+                        <div class="d-flex justify-content-center">
+                            {% for player in match.away_players %}
+                                <span class="text-success border border-success rounded p-2">
+                                    {{ player }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- CAPTAIN TO UPDATE MATCH PLAYERS -->
+    {% if current_user.team == match.home_team or current_user.team == match.away_team %}
+        {% if current_user.player_status == "Captain" and allow_players_submission != False %}
+        <div class="content-section text-center p-3">
+            <form action="{{url_for('matches.update_players', match_id=match.id)}}" method="POST">
+                <fieldset class="form-group">
+                    {% if current_user.team == match.home_team and match.home_players %}
+                        <legend class="border-bottom mb-4">Update Players</legend>
+                    {% elif current_user.team == match.away_team and match.away_players %}
+                        <legend class="border-bottom mb-4">Update Players</legend>
+                    {% else%}
+                        <legend class="border-bottom mb-4">Who Will Be Playing?</legend>
+                    {% endif %}
+                    <div class="d-flex justify-content-center">
+                        {% for player in players_team %}
+                            <div class="btn-group-toggle" data-toggle="buttons">
+                                <label for="id_{{ player.name }}" class="js-toggle btn btn-outline-primary p-2 m-1">
+                                    <input type="checkbox" id="{{ player.name }}" name="users" value="{{ player.name }}">
+                                    {{ player.name }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    <input type="submit" value="Update!" class="btn btn-outline-info mt-3">
+                </div>
+            </form>
+        </div>
+        {% endif %}
+    {% endif %}
+
+    <!-- SETTING, CONFIRMING AND UPDATING SCORES -->
+        {% if current_user.player_status == 'Captain' %}
+        <div class="container text-center">
+            <div class="row row-eq-height">
+                <!-- HOME TEAM SET SCORE FOR AWAY TEAM -->
+                {% if current_user.team == match.home_team and not match.away_approved %}
+                    <div class="content-section col-sm m-3">
+                        <form action="" method="POST">
+                            {{ form.hidden_tag() }}
+                            <fieldset class="form-group">
+                                <legend class="border-bottom mb-4">Update Score For {{ match.away_team }}</legend>
+                                <div class="form-group">
+                                    {{ form.score.label(class="form-control-label") }}
+
+                                    {% if form.score.errors %}
+                                        {{ form.score(class="form-control form-control-lg is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.score.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.score(class="form-control form-control-lg") }}
+                                    {% endif %}
+                                </div>
+                            </fieldset>
+                            <div class="form-group">
+                                {{ form.submit(class="btn btn-outline-info") }}
+                            </div>
+                        </form>
+                    </div>
+
+                <!-- AWAY TEAM SET SCORE FOR HOME TEAM -->
+                    {% elif current_user.team == match.away_team and not match.home_approved %}
+                    <div class="content-section col-sm m-3">
+                       <form action="" method="POST">
+                            {{ form.hidden_tag() }}
+                            <fieldset class="form-group">
+                                <legend class="border-bottom mb-4">Update Score For {{ match.home_team }}</legend>
+                                <div class="form-group">
+                                    {{ form.score.label(class="form-control-label") }}
+
+                                    {% if form.score.errors %}
+                                        {{ form.score(class="form-control form-control-md is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.score.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.score(class="form-control form-control-md") }}
+                                    {% endif %}
+                                </div>
+                            </fieldset>
+                            <div class="form-group">
+                                {{ form.submit(class="btn btn-outline-info") }}
+                            </div>
+                        </form>
+                    {% endif %}
+                    </div>
+
+                <!-- HOME TEAM TO CONFIRM HOME SCORE SET BY AWAY TEAM -->
+                {% if current_user.team == match.home_team and match.home_score != None and not match.home_approved %}
+                    <div class="content-section col-sm m-3">
+                        <form action="{{url_for('matches.confirm_score', match_id=match.id)}}", method="POST">
+                            <fieldset class="form-group">
+                                <legend class="border-bottom mb-2">Confirm score for {{ match.home_team }}</legend>
+                                <h1 class="m-4"> {{ match.home_score }} </h1>
+                                <input type="submit" value="Confirm Score" id="confirmScore" class="btn btn-outline-info mt-3">
+                            </fieldset>
+                        </form>
+                    </div>
+                <!-- AWAY TEAM TO CONFIRM AWAY SCORE SET BY HOME TEAM -->
+                {% elif current_user.team == match.away_team and match.away_score != None and not match.away_approved %}
+                    <div class="content-section col-sm m-3">
+                        <form action="{{url_for('matches.confirm_score', match_id=match.id)}}", method="POST">
+                            <fieldset class="form-group">
+                                <legend class="border-bottom mb-2">Confirm score for {{ match.away_team }}</legend>
+                                <h1 class="m-4"> {{ match.away_score }} </h1>
+                                <input type="submit" value="Confirm Score" id="confirmScore" class="btn btn-outline-info mt-3">
+                            </fieldset>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+    {% if current_user.admin_level == 'Admin' or current_user.admin_level == 'Rep' %}
+    <div class="text-center m-auto">
+        <div class="d-flex justify-content-center content-section p-3">
+            <div class="ml-3 mr-3">
+                <a href="{{url_for('matches.update_match', match_id=match.id)}}">
+                    <button class="btn btn-danger p-2">
+                        Edit Match
+                    </button>
+                </a>
+            </div>
+            <div class="ml-3 mr-3">
+                <form action="{{url_for('matches.delete_match', match_id=match.id)}}"
+                method="POST" class="form-check-inline">
+                    <input type="submit" class="btn btn-danger p-2" value="Delete Match">
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+<script src="{{url_for('static', filename='scripts/player_btn_toggle.js')}}" type="text/javascript"></script>
+{% endblock content %}

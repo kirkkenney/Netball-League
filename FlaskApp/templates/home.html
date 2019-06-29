@@ -1,0 +1,120 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+    <div class="text-center">
+        <div class="content-section">
+            <div class="border-bottom mb-3">
+                <div class="container">
+                    <div class="d-flex flex-wrap text-center justify-content-center">
+                        <div class="m-2">
+                            <h3>Recent Matches</h3>
+                        </div>
+                        <div class="m-2">
+                            <h3>
+                                <a href="{{url_for('matches.previous_matches')}}">
+                                <button class="btn branding">
+                                All Previous Matches
+                                </button>
+                            </a>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row justify-content-around">
+                    {% for match in prev_matches[:2] %}
+                        <div class="col-sm m-3 content-section">
+                            <h4 class="m-1"><a href="{{url_for('matches.match_page', match_id=match.id)}}">
+                            {{ match.home_team }} vs {{ match.away_team }}</a></h4>
+                            {% if match.time %}
+                            <p class=m-2> at {{ match.time.strftime('%H:%M') }} on {{ match.date.strftime('%d/%m/%Y') }}</p>
+                            {% endif %}
+                            <p class="m-1"> where: {{ match.location }}</p>
+                            {% if match.home_approved and match.away_approved %}
+                                <p class="m-1"> Score: {{ match.home_score }} - {{ match.away_score }}</p>
+                            {% else %}
+                                <p class="m-1"> Score: Match not finished</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="row">
+                    {% for match in prev_matches[2:] %}
+                        <div class="col-sm m-3 content-section">
+                            <h4 class="m-1"><a href="{{url_for('matches.match_page', match_id=match.id)}}">
+                            {{ match.home_team }} vs {{ match.away_team }}</a></h4>
+                            {% if match.time %}
+                            <p class=m-2> at {{ match.time.strftime('%H:%M') }} on {{ match.date.strftime('%d/%m/%Y') }}</p>
+                            {% endif %}
+                            <p class="m-1"> where: {{ match.location }}</p>
+                            {% if match.home_approved and match.away_approved %}
+                                <p class="m-1"> Score: {{ match.home_score }} - {{ match.away_score }}</p>
+                            {% else %}
+                                <p class="m-1"> Score: Match not finished</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="border-bottom mb-3">
+                <div class="container">
+                    <div class="d-flex flex-wrap text-center justify-content-center">
+                        <div class="m-2">
+                            <h3>Upcoming Matches</h3>
+                        </div>
+                        <div class="m-2">
+                            <h3>
+                                <a href="{{url_for('matches.upcoming_matches')}}">
+                                <button class="btn branding">
+                                All Upcoming Matches
+                                </button>
+                            </a>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    {% for match in next_matches[:2] %}
+                        <div class="col-sm m-3 content-section">
+                            <h4 class="m-1"><a href="{{url_for('matches.match_page', match_id=match.id)}}">
+                            {{ match.home_team }} vs {{ match.away_team }}</a></h4>
+                            {% if match.time %}
+                            <p class=m-2> at {{ match.time.strftime('%H:%M') }} on {{ match.date.strftime('%d/%m/%Y') }}</p>
+                            {% endif %}
+                            <p class="m-1"> where: {{ match.location }}</p>
+                            {% if match.home_approved and match.away_approved %}
+                                <p class="m-1"> Score: {{ match.home_score }} - {{ match.away_score }}</p>
+                            {% else %}
+                                <p class="m-1"> Score: Match not finished</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="row">
+                    {% for match in next_matches[2:] %}
+                        <div class="col-sm m-3 content-section">
+                            <h4 class="m-1"><a href="{{url_for('matches.match_page', match_id=match.id)}}">
+                            {{ match.home_team }} vs {{ match.away_team }}</a></h4>
+                            {% if match.time %}
+                            <p class=m-2> at {{ match.time.strftime('%H:%M') }} on {{ match.date.strftime('%d/%m/%Y') }}</p>
+                            {% endif %}
+                            <p class="m-1"> where: {{ match.location }}</p>
+                            {% if match.home_approved and match.away_approved %}
+                                <p class="m-1"> Score: {{ match.home_score }} - {{ match.away_score }}</p>
+                            {% else %}
+                                <p class="m-1"> Score: Match not finished</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

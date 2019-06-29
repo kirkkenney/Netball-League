@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    {% if matches %}
+
+    <div class="text-center">
+        <h2 class="border-bottom m-4">All {{ team }} Matches</h2>
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                {% for match in matches %}
+                    <div class="col-sm col-md-5 m-2 content-section">
+                        <h4 class="m-1"><a href="{{url_for('matches.match_page', match_id=match.id)}}">
+                        {{ match.home_team }} vs {{ match.away_team }}</a></h4>
+                        {% if match.time %}
+                        <p class=m-2> at {{ match.time.strftime('%H:%M') }} on {{ match.date.strftime('%d/%m/%Y') }}</p>
+                        {% endif %}
+                        <p class="m-1"> where: {{ match.location }}</p>
+                        {% if match.home_approved and match.away_approved %}
+                            <p class="m-1"> Score: {{ match.home_score }} - {{ match.away_score }}</p>
+                        {% else %}
+                            <p class="m-1"> Score: Match not finished</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+
+{% endblock content %}

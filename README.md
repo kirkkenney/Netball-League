@@ -53,20 +53,25 @@ as well as dynamically inserted edit permissions within the relevant pages.
 
 ## To Do
 
- - Passwords are currently set to 'password' by default for testing purposes. This
+* Tidy up styling.
+
+* Bug currently prevents a user from being deleted if the user has posts
+
+ ~~ * Passwords are currently set to 'password' by default for testing purposes. This
  needs to be amended so that they are automatically assigned a generated token as
- their password, and emailed a reset link to manually update it.
+ their password, and emailed a reset link to manually update it.~~
 
- - Add a new Posts database model, page and form. Allow players to add posts
+   * Passwords now set using bcrypt library
+
+ ~~ * Add a new Posts database model, page and form. Allow players to add posts
  to their team's message board. Add a conditional check to allow team captain
- to send their post as an email to all the team's players
+ to send their post as an email to all the team's players~~
 
- - Update matches page template to allow umpire to update the score, only
+~~ * Update matches page template to allow umpire to update the score, only
  to be displayed if both team capains approve. Captains to add players to
- the match.
+ the match. ~~
 
- - Update database tables and relevant pages to include 'approved by' info,
- and timestamp appropriate updates (approved Users, set/approve match scores)
+ ~~ * Update database tables and relevant pages to include 'approved by' info,
+ and timestamp appropriate updates (approved Users, set/approve match scores) ~~
 
- - Clean up code, add comments
-
+ ~~ * Clean up code, add comments ~~
